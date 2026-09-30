@@ -1,0 +1,166 @@
+{
+  "title": "세계 평화를 위해 결혼해주세요",
+  "version": "2026-09-30",
+  "type": "static-web",
+  "entrypoints": [
+    "index.html",
+    "demon-expressions/index.html"
+  ],
+  "files": [
+    {
+      "file": "bedroom-comic.png",
+      "bytes": 1764405,
+      "sha256": "fb9855ddeb4e2372d92b0cc8040c35bde57550a5144b801e434c4421843fef1d"
+    },
+    {
+      "file": "bellune-night.png",
+      "bytes": 2975878,
+      "sha256": "09dab658cca37b944a815c83171be2211e9b585d1db822d4ccec60bf72c8bb87"
+    },
+    {
+      "file": "demon-cutscene-aftermath-v3.png",
+      "bytes": 2192578,
+      "sha256": "8f52cb84b37fe02f8cc36fb2f2a6ebf1c4b77bf5e6f364b820fda8afefd2498f"
+    },
+    {
+      "file": "demon-cutscene-balcony-v3.png",
+      "bytes": 2231463,
+      "sha256": "749f79423bca0bdfcf17fa580f3e7cbcb1d3e8c7780496f82a99ee621c278e61"
+    },
+    {
+      "file": "demon-cutscene-spell-v3.png",
+      "bytes": 2296980,
+      "sha256": "d3a36ff7aa9b3e5da6c9a7c638aa9ded441c9865d11d6227808403bee96b1421"
+    },
+    {
+      "file": "demon-expressions/angry.png",
+      "bytes": 2153854,
+      "sha256": "b8c0a8a6d5ccf388e5026b12a54ed3560b9a2f829fd0f86f0b94695d2f1db8ac"
+    },
+    {
+      "file": "demon-expressions/crossed-pose.png",
+      "bytes": 2235957,
+      "sha256": "db4e39b7d83f93a44c82d9ed1e73eb3c63ef0a74d5640f3bcb3dc4a64667528a"
+    },
+    {
+      "file": "demon-expressions/curious-pose.png",
+      "bytes": 2361825,
+      "sha256": "92e268919ac7f01a292f0d5a03060f01e4c15a7d434bf074c8d777017796ac14"
+    },
+    {
+      "file": "demon-expressions/downcast-pose.png",
+      "bytes": 2246847,
+      "sha256": "6a8f7693250a5d0bac184ebdd203c21a9b524a0affdeaaeb9f7a75d11669559c"
+    },
+    {
+      "file": "demon-expressions/enraged.png",
+      "bytes": 2349176,
+      "sha256": "3b94c27b7f0bd5f0671cfad42dbc2672632f8a319b7c7f08a7a4dd0a22577056"
+    },
+    {
+      "file": "demon-expressions/face-source.js",
+      "bytes": 1060322,
+      "sha256": "3d788c8b190b4b3c2a80653291c7f4689b1f1e2df671f1ba14bb63dff983f382"
+    },
+    {
+      "file": "demon-expressions/flustered-pose.png",
+      "bytes": 2357683,
+      "sha256": "0431b202f8e0d8d3e09f92eb9f2b145566075f462ef32aea9c979521e34337ad"
+    },
+    {
+      "file": "demon-expressions/furious-pose.png",
+      "bytes": 2266286,
+      "sha256": "f1fa18441e8fd5aca58a3a45966a1653e6485bdd06ab9cf21d2be03132ca78db"
+    },
+    {
+      "file": "demon-expressions/index.html",
+      "bytes": 7751,
+      "sha256": "70c69adfc59260d65065457e0bf370f7ad35a8d397f033d1337bdf52753a8ddd"
+    },
+    {
+      "file": "demon-expressions/portrait.js",
+      "bytes": 11589,
+      "sha256": "514c72bf306073d5eecb54d9f03c5f998704027f4713864144302904f4f83e2d"
+    },
+    {
+      "file": "demon-expressions/shy-pose.png",
+      "bytes": 2223071,
+      "sha256": "66c9d1b3f783ba44a489e869eb382acea72f9ae20f5070b081a9ae9e90baa3ac"
+    },
+    {
+      "file": "demon-route.css",
+      "bytes": 3317,
+      "sha256": "16b8fe8dc72be5560e959a10d7a7726bcf8193799132cfd21c573a997aad1f0e"
+    },
+    {
+      "file": "demon-route.js",
+      "bytes": 33562,
+      "sha256": "7ae079feec2687a06879e1e438f1a24200933c4e257a15613213806fe0fb2fa0"
+    },
+    {
+      "file": "effects.js",
+      "bytes": 17889,
+      "sha256": "57c323d38e0410610c335aa3b50cdc3fb03a1e8b24b05a0775182542383a2731"
+    },
+    {
+      "file": "goddess-comic.png",
+      "bytes": 2077044,
+      "sha256": "65c8ce4eb8b0d2cc63dff294095ded9fb30aa9ee10959d17ecc0741038fcf4c1"
+    },
+    {
+      "file": "index.html",
+      "bytes": 39582,
+      "sha256": "19e41d0e75b28293bcd5ff286006fc481569c2bcc2111399c518714a264d3e7d"
+    },
+    {
+      "file": "main-opening-blink.png",
+      "bytes": 1733394,
+      "sha256": "69aad2036a54a48b50ad7bc7011d2791e8dca744ba49a8d75bf02bae2be758d8"
+    },
+    {
+      "file": "main-opening.png",
+      "bytes": 1728186,
+      "sha256": "6c9c3b8ab5ad24861c88b23eb48f0ac39acaac4291ba0b281d2dc3e371e8ce31"
+    },
+    {
+      "file": "mural-demon.png",
+      "bytes": 3281862,
+      "sha256": "d6919110c26724da57062c146c6d739cb9e98d730bbf2fb451a6e752061c6a92"
+    },
+    {
+      "file": "mural-dwarf.png",
+      "bytes": 3601432,
+      "sha256": "28d30db283c24e4e1162d6d75c07f2a3798e85ed0fd26551fd5271e0936fb78a"
+    },
+    {
+      "file": "mural-elf.png",
+      "bytes": 3578808,
+      "sha256": "d2bd66804b46a821e9d793059e0538c00b00561b15ba50e39e48a1486eaae37e"
+    },
+    {
+      "file": "mural-human.png",
+      "bytes": 3475966,
+      "sha256": "bb77c3a7c7f42a376f7da846d2df0123c77cfb842a0bd95e48ed7d6348cb975a"
+    },
+    {
+      "file": "mural-war-portrait-v2.png",
+      "bytes": 3412239,
+      "sha256": "e95afc709b63ed2a64109a73fc9801681f12f2147af5945e0b4f9146092daab1"
+    },
+    {
+      "file": "mural-war-v2.png",
+      "bytes": 3449799,
+      "sha256": "63252051d5004064077278932c4dbbf76b7347f33897f03079d553fa9333fd09"
+    },
+    {
+      "file": "room-wall-comic.png",
+      "bytes": 1362735,
+      "sha256": "1407010fe4035b7d396a0faec2c18c2de3a2ce5075fad841b02d68d73685c208"
+    },
+    {
+      "file": "storybook-background-portrait.png",
+      "bytes": 2739563,
+      "sha256": "1f9673bc17bbb2396025f969f7c07ab1b5d6fe772ac8a98c04192bd399021659"
+    }
+  ]
+}
