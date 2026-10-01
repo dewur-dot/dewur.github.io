@@ -1,6 +1,6 @@
 {
   "title": "세계 평화를 위해 결혼해주세요",
-  "version": "2026-09-30",
+  "version": "2026-10-01",
   "type": "static-web",
   "entrypoints": [
     "index.html",
@@ -99,8 +99,8 @@
     },
     {
       "file": "effects.js",
-      "bytes": 17889,
-      "sha256": "57c323d38e0410610c335aa3b50cdc3fb03a1e8b24b05a0775182542383a2731"
+      "bytes": 18419,
+      "sha256": "7ba1fafcc59e00d76d959f1a5e34302f90ae52d20f33415dee9ea6a51639c52c"
     },
     {
       "file": "goddess-comic.png",
@@ -109,8 +109,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 39582,
-      "sha256": "19e41d0e75b28293bcd5ff286006fc481569c2bcc2111399c518714a264d3e7d"
+      "bytes": 39669,
+      "sha256": "ec739b4d9da79d61b150bdda5ef94ade883d5dc3a9bb65bba06a66decbd97d42"
     },
     {
       "file": "main-opening-blink.png",
@@ -121,6 +121,11 @@
       "file": "main-opening.png",
       "bytes": 1728186,
       "sha256": "6c9c3b8ab5ad24861c88b23eb48f0ac39acaac4291ba0b281d2dc3e371e8ce31"
+    },
+    {
+      "file": "mobile-layout.css",
+      "bytes": 1391,
+      "sha256": "a7f9e2182c6bc8b2c92bcead0b0f32ed4e7ad3961ef26da29f000324b1bb3315"
     },
     {
       "file": "mural-demon.png",

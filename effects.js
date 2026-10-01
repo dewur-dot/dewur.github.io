@@ -328,7 +328,15 @@
     play(type){this.clear();if(!durations[type])return;this.type=type;this.start=performance.now();this.tick(this.start)}
     tick(now){
       if(!this.type)return;
-      const rect=this.canvas.getBoundingClientRect(), dpr=Math.min(devicePixelRatio||1,2);
+      if(this.canvas.classList.contains('story-effect-canvas')){
+        const host=this.canvas.closest('.demon-route')||this.canvas.closest('.game');
+        const panel=host?.querySelector('.panel');
+        if(panel){
+          const height=Math.max(1,panel.getBoundingClientRect().top);
+          this.canvas.style.height=height+'px';
+        }
+      }
+      const rect=this.canvas.getBoundingClientRect(), dpr=Math.min(devicePixelRatio||1,1.5);
       const w=Math.max(1,rect.width), h=Math.max(1,rect.height);
       if(this.canvas.width!==Math.round(w*dpr)||this.canvas.height!==Math.round(h*dpr)){
         this.canvas.width=Math.round(w*dpr);this.canvas.height=Math.round(h*dpr);
@@ -353,7 +361,9 @@
     }
     play(cues=[]){
       this.clear();
-      if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+      const host=this.director.canvas.closest('.demon-route')||this.director.canvas.closest('.game');
+      const panel=host?.querySelector('.panel');
+      if(panel)this.flash.style.height=Math.max(1,panel.getBoundingClientRect().top)+'px';
       const generation=this.generation;
       for(const [delay,type] of cues){
         const run=()=>{
