@@ -9,6 +9,7 @@
     box-shadow:0 6px 22px #0004;scrollbar-width:thin;
   }
   .panel::before{inset:6px}.panel::after{left:14px;top:12px;font-size:10px}
+  .demon-route .panel,.demon-route:is(.has-cutscene,.has-portrait) .panel{margin-top:auto}
   .panel .eyebrow{font-size:10px;letter-spacing:.1em;margin-bottom:7px;padding-left:15px}
   .panel .name{font-size:13px;margin-bottom:6px}
   .panel .text{font-size:16px;line-height:1.55;min-height:0;margin-bottom:10px;word-break:normal;overflow-wrap:anywhere}

@@ -1,7 +1,7 @@
 /* Demon lord route: first-person cutscenes, choice state, and save/resume. */
 (() => {
   const nodes = {};
-  const chapters = ['낯선 인간', '관찰 대상', '식탁의 빈자리', '매일 찾아오는 용사', '쓸모없는 선물'];
+  const chapters = window.DemonStory?.chapters || ['낯선 인간', '관찰 대상', '식탁의 빈자리', '매일 찾아오는 용사', '쓸모없는 선물'];
   const say = (id, chapter, who, text, next, extra = {}) => {
     nodes[id] = {id, chapter, who, text, next, ...extra};
   };
@@ -153,19 +153,44 @@
   say('not-love', 4, '이야기', '좋아한다는 말은 아니었다.\n\n당신을 인간으로 보는 시선도 아직 차가웠다.\n\n그래도 내일, 당신이 앉을 자리는 남아 있었다.', 'opening-end');
   say('opening-end', 4, '초반부 완료', '죽여야 할 침입자에서, 곁에 두고 지켜볼 인간으로.\n\n이제야 두 사람의 이야기가 시작됩니다.', null, {end: true});
 
+  // The new scenario begins at imprisonment; the previous preview remains a save migration source.
+  const oldIds=new Set(Object.keys(nodes));
+  if(window.DemonStory){
+    const removedStart=Object.keys(nodes).indexOf('guest-room');
+    for(const id of Object.keys(nodes).slice(removedStart))delete nodes[id];
+    for(const n of Object.values(nodes))n.chapter=0;
+    nodes.guest.text='“죽이는 것으로는 끝나지 않는군.”\n\n“잡아가라. 감옥으로.”';nodes.guest.who='마왕';nodes.guest.next='story-1-entry';
+    Object.assign(nodes,window.DemonStory.nodes);
+  }
   const copy = value => JSON.parse(JSON.stringify(value));
   const SAVE = 'peace-marriage-demon-v1';
   const ACTIVE = 'peace-marriage-active-route';
-  const newState = () => ({node:'blessing', affection:-100, deaths:0, mood:'적대', checkpoint:null});
+  const newState = () => ({node:'blessing', affection:-100, trust:0, anger:0, flags:[], personality:{playful:0,gentle:0,direct:0,cautious:0}, name:'전사', inStory:false, deaths:0, mood:'적대', checkpoint:null});
+  const moods=['적대','의심','호기심','관찰 대상','이상한 인간','신뢰하는 인간','특별한 인간','사랑하는 사람','배우자'];
+  const snapshot=state=>{const result=copy(state);delete result.checkpoint;return result};
+  const relationship=state=>state.flags.includes('결혼')?'배우자':state.affection>=75&&state.flags.includes('사랑자각')?'사랑하는 사람':state.affection>=60?'특별한 인간':state.affection>=40?'신뢰하는 인간':state.affection>=20?'이상한 인간':'관찰 대상';
+  const vows={
+    playful:'“결혼식에서도 사랑의 힘 타령을 하면……”\n\n그녀가 당신의 손을 더 꼭 잡았다.\n\n“……평생 옆에서 들어주겠다. 그러니까 도망가지 마라.”',
+    gentle:'“네가 내 곁에 있어준 날들을 기억한다.”\n\n“……고맙다. 이제는 나도 네가 돌아올 곳이 되어주겠다.”',
+    direct:'“언제나 하고 싶은 말을 피하지 않았지.”\n\n“이번에는 나도 그러겠다. 너와 결혼하고 싶다. 내 옆에 있어라.”',
+    cautious:'“네가 기다려준 만큼, 이번에는 내가 먼저 말하겠다.”\n\n“……나와 결혼해주겠나? 오늘도, 내일도. 내 곁에서.”'
+  };
   class RouteEngine {
     constructor(save) { this.state=newState();this.history=[];if(save)this.restore(save); }
     restore(save) {
-      if(!save||save.version!==1||!nodes[save.state?.node])return false;
+      if(!save||![1,2].includes(save.version)||!save.state)return false;
       const st=save.state;
-      if(!Number.isInteger(st.affection)||st.affection < -100||st.affection > -65||!Number.isInteger(st.deaths)||st.deaths<0)return false;
-      if(!['적대','의심','호기심'].includes(st.mood))return false;
-      if(st.checkpoint&&(!nodes[st.checkpoint.node]?.checkpoint||!Number.isInteger(st.checkpoint.affection)||!['적대','의심','호기심'].includes(st.checkpoint.mood)))return false;
-      this.state=copy(st);this.history=[];return true;
+      if(!Number.isInteger(st.affection)||st.affection < -100||st.affection > 100||!Number.isInteger(st.deaths)||st.deaths<0||!moods.includes(st.mood))return false;
+      if(save.version===1){
+        if(!oldIds.has(st.node))return false;
+        this.state={...newState(),...copy(st),checkpoint:null};
+        if(!nodes[st.node])this.enter('story-1-entry');
+      }else{
+        if(!nodes[st.node]||![st.trust,st.anger].every(v=>Number.isInteger(v)&&v>=0&&v<=100)||!Array.isArray(st.flags)||st.flags.length>100||!st.flags.every(v=>typeof v==='string')||!st.personality||!Object.values(st.personality).every(v=>Number.isInteger(v)&&v>=0&&v<=100)||typeof st.name!=='string'||typeof st.inStory!=='boolean')return false;
+        if(st.checkpoint&&(!nodes[st.checkpoint.node]?.checkpoint||!Number.isInteger(st.checkpoint.affection)))return false;
+        this.state={...newState(),...copy(st),name:st.name.slice(0,20)};
+      }
+      this.history=[];return true;
     }
     get current(){return nodes[this.state.node]}
     choose(index=0) {
@@ -173,18 +198,45 @@
       if(n.end||(!n.next&&!c)|| (n.choices&&!c))return false;
       this.history.push(copy(this.state));
       if(n.retry){
-        const cp=this.state.checkpoint;
-        if(cp){this.state.affection=cp.affection;this.state.mood=cp.mood;}
-      }else if(c){this.state.affection=Math.max(-100,Math.min(-65,this.state.affection+c.delta));}
-      this.state.node=c?c.next:n.next;
-      const target=this.current;
-      if(target.death)this.state.deaths++;
-      if(target.mood)this.state.mood=target.mood;
-      if(target.checkpoint)this.state.checkpoint={node:target.id,affection:this.state.affection,mood:this.state.mood};
+        const cp=this.state.checkpoint,deaths=this.state.deaths;
+        if(cp){this.state={...this.state,...copy(cp),deaths,checkpoint:copy(cp)};}
+      }else if(c){
+        this.reward({affection:c.delta,trust:c.trust,anger:c.anger,flags:c.flags});
+        if(c.tone)this.state.personality[c.tone]++;
+      }
+      this.enter(c?c.next:n.next);
       return true;
     }
+    reward(r={}){
+      const s=this.state;
+      if(r.affection)s.affection=Math.max(s.inStory?0:-100,Math.min(s.inStory?100:-65,s.affection+r.affection));
+      if(r.trust)s.trust=Math.max(0,Math.min(100,s.trust+r.trust));
+      if(r.anger)s.anger=Math.max(0,Math.min(100,s.anger+r.anger));
+      for(const flag of r.flags||[])if(!s.flags.includes(flag))s.flags.push(flag);
+    }
+    enter(id){
+      for(let hops=0;hops<12;hops++){
+        const n=nodes[id];if(!n)throw new Error('Missing dialogue: '+id);
+        this.state.node=id;
+        if(n.beginRelationship){this.state.inStory=true;this.state.affection=0;this.state.trust=0;this.state.anger=0;this.state.flags=[];}
+        if(n.reward)this.reward(n.reward);
+        if(n.gate==='gift')id=this.state.affection>=20||this.state.flags.includes('첫선물')?n.next:'gift-closed-0';
+        else if(n.gate==='confession')id=this.state.affection>=70&&this.state.trust>=40&&this.state.flags.includes('사랑자각')?n.next:this.state.trust>=30?'friend-ending-0':'distance-ending-0';
+        else if(n.gate==='marriage')id=this.state.affection>=90&&this.state.flags.includes('고백성공')?n.next:'end-promise';
+        else if(!n.text&&!n.dynamic&&!n.choices&&!n.end)id=n.next;
+        else{
+          if(n.death)this.state.deaths++;
+          if(n.ending==='end-married')this.reward({flags:['결혼']});
+          if(n.mood)this.state.mood=n.mood;
+          if(this.state.inStory)this.state.mood=relationship(this.state);
+          if(n.checkpoint)this.state.checkpoint=snapshot(this.state);
+          return;
+        }
+      }
+      throw new Error('Circular story gate');
+    }
     back(){if(!this.history.length)return false;this.state=this.history.pop();return true}
-    save(){return {version:1,state:copy(this.state)}}
+    save(){return {version:2,state:copy(this.state)}}
   }
   const cutscenes={
     balcony:{src:'./demon-cutscene-balcony-v3.png',alt:'주인공의 눈높이에서 바라본, 난간을 잡고 번개 치는 마계를 내려다보는 마왕의 옆모습'},
@@ -192,7 +244,7 @@
     aftermath:{src:'./demon-cutscene-aftermath-v3.png',alt:'바닥에 쓰러진 주인공의 시선. 피가 흐르는 바닥과 자신의 손 너머로 마왕이 등을 돌려 걸어간다.'}
   };
   // Explicit node assignments keep rewind and saved-game restoration deterministic.
-  for(const id of ['balcony-profile','queen-hair','queen-profile','queen-fatigue','human','question'])nodes[id].cutscene='balcony';
+  for(const id of ['balcony-profile','queen-hair','queen-profile','queen-fatigue','human','question'])if(nodes[id])nodes[id].cutscene='balcony';
   for(const id of ['first-impact','first-confusion'])nodes[id].cutscene='spell';
   for(const id of ['first-fall','first-last-words','first-fade'])nodes[id].cutscene='aftermath';
   // One standing sprite with a local face rig. Cutscenes and DEAD END take precedence.
@@ -206,7 +258,7 @@
     uncomfortable:['door-guard','gift-later','gift-here','what-gift','test-gift','shield-strap','use-gift','noticed'],
     gloomy:['every-day']
   };
-  for(const [expression,ids]of Object.entries(expressions))for(const id of ids)nodes[id].expression=expression;
+  for(const [expression,ids]of Object.entries(expressions))for(const id of ids)if(nodes[id])nodes[id].expression=expression;
   const sceneEffects={
     'arrival-thunder':[[0,'flash']],
     'first-impact':[[0,'flash'],[120,'hit']],
@@ -233,10 +285,12 @@
   function mount(){
     if(root)return;
     root=document.createElement('section');root.className='demon-route';root.hidden=true;root.setAttribute('aria-label','마왕 루트');
-    root.innerHTML=`<div class="demon-shell"><header class="top"><div><div class="chapter demon-title">마왕 · 낯선 인간</div><div class="demon-status" aria-label="마왕과의 관계"><span>호감도 <strong class="demon-affection" id="demonAffection">−100</strong></span><span>태도 <strong id="demonMood">적대</strong></span><span>사망 <strong id="demonDeaths">0회</strong></span></div></div><div class="demon-header-actions"><button type="button" class="control" id="demonRestart">첫 만남부터</button><button type="button" class="control" id="demonMenu">메인으로</button></div></header><section class="panel" id="demonPanel" aria-live="polite"><div class="eyebrow" id="demonChapter"></div><div class="name" id="demonSpeaker"></div><p class="text" id="demonText"></p><div class="choices" id="demonChoices"></div><div class="controls"><button type="button" class="control" id="demonAuto" aria-pressed="false">자동넘기기 ○</button><button type="button" class="control" id="demonBack">되돌리기 ↶</button><span class="demon-saving" id="demonSaving"></span></div><div class="meta"><span id="demonStep"></span><div class="progress"><span id="demonBar"></span></div><span class="click-hint" id="demonClick" aria-hidden="true">click</span></div></section></div>`;
+    root.innerHTML=`<div class="demon-shell"><header class="top"><div><div class="chapter demon-title">마왕 · 낯선 인간</div><div class="demon-status" aria-label="마왕과의 관계"><span>호감도 <strong class="demon-affection" id="demonAffection">−100</strong></span><span>태도 <strong id="demonMood">적대</strong></span><span>사망 <strong id="demonDeaths">0회</strong></span></div></div><div class="demon-header-actions"><button type="button" class="control" id="demonJournalOpen">기록</button><button type="button" class="control" id="demonRestart">처음부터</button><button type="button" class="control" id="demonMenu">메인으로</button></div></header><section class="panel" id="demonPanel" aria-live="polite"><div class="eyebrow" id="demonChapter"></div><div class="name" id="demonSpeaker"></div><p class="text" id="demonText"></p><div class="choices" id="demonChoices"></div><div class="controls"><button type="button" class="control" id="demonAuto" aria-pressed="false">자동넘기기 ○</button><button type="button" class="control" id="demonBack">되돌리기 ↶</button><span class="demon-saving" id="demonSaving"></span></div><div class="meta"><span id="demonStep"></span><div class="progress"><span id="demonBar"></span></div><span class="click-hint" id="demonClick" aria-hidden="true">click</span></div></section></div><dialog class="story-journal" id="demonJournal"><header><span>두 사람의 기록</span><button class="control" id="demonJournalClose" type="button">닫기 ×</button></header><p class="journal-location" id="journalChapter"></p><div class="journal-stats" id="journalStats"></div><h3>함께한 사건</h3><div class="journal-events" id="journalEvents"></div><h3>최근 대화</h3><div class="journal-dialogue" id="journalDialogue"></div></dialog>`;
     const art=document.createElement('div');art.className='demon-cutscene';art.id='demonCutscene';art.hidden=true;
     const picture=document.createElement('img');picture.id='demonCutsceneImage';picture.decoding='async';picture.draggable=false;art.append(picture);root.prepend(art);
     const standing=document.createElement('div');standing.className='demon-cutscene demon-standing';standing.id='demonStanding';standing.hidden=true;root.prepend(standing);
+    const goddess=document.createElement('div');goddess.className='demon-cutscene';goddess.id='demonGoddess';goddess.hidden=true;
+    const goddessImage=document.createElement('img');goddessImage.src='./goddess-comic.png';goddessImage.alt='사랑의 여신';goddess.append(goddessImage);root.prepend(goddess);
     portraitPlayer=window.DemonPortrait?DemonPortrait.create(standing):null;
     if(portraitPlayer)portraitPlayer.ready.catch(()=>{standing.hidden=true;root.classList.remove('has-portrait');});
     // Preload the three local assets before their dialogue beats arrive.
@@ -246,12 +300,28 @@
     const flash=document.createElement('div');flash.className='flash story-scene-flash';flash.setAttribute('aria-hidden','true');root.prepend(flash);
     scenePlayer=new EffectCuePlayer(canvas,flash);
     get('demonMenu').onclick=close;
+    get('demonJournalOpen').onclick=()=>{
+      clearTimeout(timer);scenePlayer.clear();
+      get('journalChapter').textContent=chapters[engine.current.chapter];
+      get('journalStats').textContent=`호감 ${engine.state.affection}  ·  신뢰 ${engine.state.trust}  ·  분노 ${engine.state.anger}`;
+      get('journalEvents').replaceChildren();
+      const flags=engine.state.flags.length?engine.state.flags:['아직 함께한 사건이 없습니다.'];
+      for(const flag of flags){const chip=document.createElement('span');chip.textContent=flag.replaceAll('_',' · ');get('journalEvents').append(chip)}
+      get('journalDialogue').replaceChildren();
+      for(const st of [...engine.history.slice(-35),engine.state]){
+        const n=nodes[st.node];if(!n||n.dynamic)continue;
+        const line=document.createElement('p');const name=document.createElement('strong');name.textContent=n.who+'  ';line.append(name,document.createTextNode(n.text.replaceAll('{{name}}',st.name||'전사')));get('journalDialogue').append(line);
+      }
+      get('demonJournal').showModal();get('demonJournal').scrollTop=0;
+    };
+    get('demonJournalClose').onclick=()=>get('demonJournal').close();
+    get('demonJournal').addEventListener('close',()=>{if(!root.hidden)render()});
     get('demonRestart').onclick=()=>{engine.history.push(copy(engine.state));engine.state=newState();render()};
     get('demonAuto').onclick=()=>{auto=!auto;render()};
     get('demonBack').onclick=()=>{if(engine.back())render()};
-    root.addEventListener('click',event=>{if(event.target.closest('button')||event.target.closest('.top'))return;advance()});
+    root.addEventListener('click',event=>{if(event.target.closest('button,.name-entry,.top,.story-journal'))return;advance()});
     document.addEventListener('keydown',event=>{
-      if(root.hidden||event.repeat||event.target.closest('button'))return;
+      if(root.hidden||get('demonJournal').open||event.repeat||event.target.closest('button,input'))return;
       if(event.key===' '||event.key==='Enter'){event.preventDefault();advance()}
       if(event.key==='Escape')close();
     });
@@ -261,7 +331,7 @@
     const resurrection=Boolean(engine.current.death);
     if(!engine.choose(index))return;
     render();
-    scenePlayer.play(resurrection?resurrectionEffects:sceneEffects[engine.state.node]||[]);
+    scenePlayer.play(resurrection?resurrectionEffects:engine.current.effects||sceneEffects[engine.state.node]||[]);
   }
   function advance(){if(!engine.current.choices&&!engine.current.death&&!engine.current.end)proceed()}
   function button(label,action){const b=document.createElement('button');b.type='button';b.className='choice';b.textContent=label;b.onclick=action;get('demonChoices').append(b)}
@@ -269,6 +339,9 @@
     clearTimeout(timer);
     scenePlayer.clear();
     const n=engine.current, state=engine.state;
+    root.dataset.location=n.location||({1:'prison',2:'prison',6:'city',7:'city',8:'balcony',10:'city',12:'village',14:'balcony'}[n.chapter]||'castle');
+    root.classList.toggle('story-ending',Boolean(n.end));
+    root.classList.toggle('remote-scene',Boolean(n.remote));
     root.classList.toggle('is-dead',Boolean(n.death));
     const scene=n.death?null:cutscenes[n.cutscene];
     root.classList.toggle('has-cutscene',Boolean(scene));
@@ -278,37 +351,53 @@
       if(picture.getAttribute('src')!==scene.src)picture.src=scene.src;
       picture.alt=scene.alt;
     }
-    const showPortrait=Boolean(!scene&&!n.death&&n.expression&&portraitPlayer);
+    const showPortrait=Boolean(!scene&&!n.death&&n.expression&&portraitPlayer&&n.who!=='사랑의 여신');
     get('demonStanding').hidden=!showPortrait;root.classList.toggle('has-portrait',showPortrait);
+    get('demonGoddess').hidden=n.who!=='사랑의 여신'||n.chapter===0;
+    root.classList.toggle('has-goddess',!get('demonGoddess').hidden);
     if(showPortrait)portraitPlayer.setExpression(n.expression).catch(()=>{get('demonStanding').hidden=true;root.classList.remove('has-portrait');});
     root.querySelector('.demon-title').textContent='마왕 · '+chapters[n.chapter];
-    get('demonChapter').textContent=n.death?'DEAD END':String(n.chapter+1).padStart(2,'0')+' · '+chapters[n.chapter];
+    get('demonChapter').textContent=n.death?'DEAD END':n.end?n.who:n.chapter===0?'서장 · 죽지 않는 인간':String(n.chapter).padStart(2,'0')+' · '+chapters[n.chapter];
     get('demonAffection').textContent=String(state.affection).replace('-','−');
     get('demonMood').textContent=state.mood;
     get('demonDeaths').textContent=state.deaths+'회';
     get('demonSpeaker').textContent=n.who==='DEAD END'?'':n.who;
-    get('demonText').textContent=n.text;get('demonText').dataset.voice=n.who;
+    let text=n.text.replaceAll('{{name}}',state.name);
+    if(n.dynamic==='vow'){
+      const tone=Object.keys(state.personality).sort((a,b)=>state.personality[b]-state.personality[a])[0];text=vows[tone];
+    }
+    get('demonText').textContent=text;get('demonText').dataset.voice=n.who;
     get('demonText').classList.toggle('emphasis',Boolean(n.emphasis));
     get('demonChoices').replaceChildren();
+    if(n.nameEntry){
+      const label=document.createElement('label');label.className='name-entry';label.textContent='당신의 이름';
+      const input=document.createElement('input');input.id='warriorName';input.type='text';input.maxLength=20;input.value=state.name==='전사'?'':state.name;input.placeholder='전사';input.autocomplete='off';input.setAttribute('aria-label','주인공 이름');
+      input.addEventListener('input',()=>{state.name=input.value.trim().slice(0,20)||'전사';get('demonText').textContent=n.text.replaceAll('{{name}}',state.name);save()});label.append(input);get('demonChoices').append(label);
+      button('이름을 말한다',()=>proceed());
+    }
     if(n.choices)n.choices.forEach((c,index)=>button(c.label,()=>proceed(index)));
     else if(n.death)button(n.retry?'선택 직전으로 돌아간다':'사랑의힘?!으로 부활한다',()=>proceed());
-    else if(n.end){button('메인 화면으로',close);button('마왕과의 첫 만남 다시 보기',()=>{engine=new RouteEngine();render()})}
+    else if(n.end){
+      button('메인 화면으로',close);
+      button('관찰 대상부터 새 이야기 시작',()=>{engine.history.push(copy(engine.state));engine.state=newState();engine.enter('story-1-entry');render()});
+    }
     get('demonAuto').textContent=auto?'자동넘기기 ●':'자동넘기기 ○';get('demonAuto').setAttribute('aria-pressed',String(auto));
     get('demonAuto').classList.toggle('active',auto);
     get('demonBack').disabled=!engine.history.length;
-    get('demonStep').textContent=(n.chapter+1)+' / '+chapters.length;
-    get('demonClick').hidden=Boolean(n.choices||n.death||n.end);
-    get('demonBar').style.width=((n.chapter+(n.end?1:.25))/chapters.length*100)+'%';
+    get('demonStep').textContent=n.chapter===0?'서장':n.chapter+' / '+(chapters.length-1);
+    get('demonClick').hidden=Boolean(n.choices||n.nameEntry||n.death||n.end);
+    get('demonBar').style.width=((n.chapter+(n.end?0:.25))/(chapters.length-1)*100)+'%';
     get('demonSaving').textContent=save()?'자동 저장됨':'이 브라우저에서는 저장할 수 없습니다';
     root.scrollTo({top:0,behavior:'instant'});
-    if(auto&&!document.hidden&&!n.death&&!n.end&&!n.choices)timer=setTimeout(advance,Math.max(4500,Math.min(18000,n.text.length*110)));
+    get('demonPanel').scrollTop=0;
+    if(auto&&!document.hidden&&!get('demonJournal').open&&!n.death&&!n.end&&!n.choices&&!n.nameEntry)timer=setTimeout(advance,Math.max(4500,Math.min(18000,text.length*110)));
   }
   function open({resume=false,onExit=()=>{}}={}){
     mount();onClose=onExit;engine=new RouteEngine();
     if(resume)engine.restore(readSave());
     root.hidden=false;document.querySelector('.game').inert=true;render();return true;
   }
-  function close(){clearTimeout(timer);scenePlayer.clear();save();root.hidden=true;document.querySelector('.game').inert=false;onClose()}
+  function close(){if(get('demonJournal').open)get('demonJournal').close();clearTimeout(timer);scenePlayer.clear();save();root.hidden=true;document.querySelector('.game').inert=false;onClose()}
   window.DemonRoute={open,hasSave,RouteEngine,nodes,cutscenes};
 })();
 

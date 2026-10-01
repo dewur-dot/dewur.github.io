@@ -89,13 +89,18 @@
     },
     {
       "file": "demon-route.css",
-      "bytes": 3317,
-      "sha256": "16b8fe8dc72be5560e959a10d7a7726bcf8193799132cfd21c573a997aad1f0e"
+      "bytes": 5832,
+      "sha256": "21b0bc4cc015d00979a5477b9741bec9c8c4acac4904506abb5f2c6f285ad3d1"
     },
     {
       "file": "demon-route.js",
-      "bytes": 33562,
-      "sha256": "7ae079feec2687a06879e1e438f1a24200933c4e257a15613213806fe0fb2fa0"
+      "bytes": 41464,
+      "sha256": "bcac8d9098c0ca285436ba3bcb81dcb81f72525b6f78f3be25c218170f495554"
+    },
+    {
+      "file": "demon-story.js",
+      "bytes": 145862,
+      "sha256": "870df1edd02ad8f9e6cf4168fb7e8f1a4c2a44f8663621d396d02482812029ac"
     },
     {
       "file": "effects.js",
@@ -109,8 +114,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 39669,
-      "sha256": "ec739b4d9da79d61b150bdda5ef94ade883d5dc3a9bb65bba06a66decbd97d42"
+      "bytes": 39759,
+      "sha256": "d26a7629b22c07d307cd028c96ffa299b3690f24be452923c5cfa91329155c3e"
     },
     {
       "file": "main-opening-blink.png",
@@ -124,8 +129,8 @@
     },
     {
       "file": "mobile-layout.css",
-      "bytes": 1391,
-      "sha256": "a7f9e2182c6bc8b2c92bcead0b0f32ed4e7ad3961ef26da29f000324b1bb3315"
+      "bytes": 1482,
+      "sha256": "432bebeea2a96f12a62f2cfe0f20ac6341b49341ffa204d65ce2c8eb038e1244"
     },
     {
       "file": "mural-demon.png",
