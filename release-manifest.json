@@ -1,10 +1,9 @@
 {
   "title": "세계 평화를 위해 결혼해주세요",
-  "version": "2026-10-01",
+  "version": "2026-10-08-party4",
   "type": "static-web",
   "entrypoints": [
-    "index.html",
-    "demon-expressions/index.html"
+    "index.html"
   ],
   "files": [
     {
@@ -16,6 +15,101 @@
       "file": "bellune-night.png",
       "bytes": 2975878,
       "sha256": "09dab658cca37b944a815c83171be2211e9b585d1db822d4ccec60bf72c8bb87"
+    },
+    {
+      "file": "cast-stage.css",
+      "bytes": 1831,
+      "sha256": "6a01142b6baac91d9b47f9b928ccd6c4cce9820632842b9c47b68665ea76ced9"
+    },
+    {
+      "file": "cast-stage.js",
+      "bytes": 4570,
+      "sha256": "50170a86ec7c168de133c59094a0d7aa787ec86344c54397d9734bc7858df0a5"
+    },
+    {
+      "file": "cast/four-king-ghost-woman-approved.png",
+      "bytes": 1856763,
+      "sha256": "224dd2a889a1685b87ddd84845d5758b8f510b1f6cd3ed28f714772c43682786"
+    },
+    {
+      "file": "cast/four-king-lunar-moth-concept-v1.png",
+      "bytes": 2306078,
+      "sha256": "d3f3c891a3670c58f7efde84bd07e23978afbb002543ee997be7a5540735fa7b"
+    },
+    {
+      "file": "cast/four-king-smoke-head-concept-v1.png",
+      "bytes": 1328649,
+      "sha256": "c24da79f20bf64008c4291d93ff5537b3b27ca0e81094e1af854b65f2be4e139"
+    },
+    {
+      "file": "cast/garmun.png",
+      "bytes": 2065860,
+      "sha256": "1dea488f7cddc3a0e44d5d41470383e9ed62088a62a4e23510eeab026618d0b7"
+    },
+    {
+      "file": "cast/hero-ella-v3.png",
+      "bytes": 2270768,
+      "sha256": "4227c1d0678bc79da9fbbff8b612f5ae02183dcb7faf3a011a1b490dae51c371"
+    },
+    {
+      "file": "cast/hero-lunael-v3.png",
+      "bytes": 2034689,
+      "sha256": "c7b64497e65e0f1181740335f111a8e84aef97cd875e6e82aa678631af46c818"
+    },
+    {
+      "file": "cast/hero-mage-v3.png",
+      "bytes": 1825008,
+      "sha256": "7b2e9f5dfd3bd707d7ee33634910cc975f265730e89c1c9a3266f0b913364e99"
+    },
+    {
+      "file": "cast/hero-priest-v3.png",
+      "bytes": 2465928,
+      "sha256": "88f57147b2f10124eccdcce25f776d4b07a946d70aa3ebc543466c2690ebe1a4"
+    },
+    {
+      "file": "cast/nia.png",
+      "bytes": 1718168,
+      "sha256": "7c3b05e53fd88eae90cd5cd4b8fcdc3274bf1b40d15194b7b8f8473247f5003e"
+    },
+    {
+      "file": "cast/pong.png",
+      "bytes": 1730442,
+      "sha256": "8cdf54e6a2a0783c80939220f18d603629c4ad63f5f2571e311615c1a2415125"
+    },
+    {
+      "file": "cast/vampire-butler-approved.png",
+      "bytes": 1263592,
+      "sha256": "12725121f6f8d4435dd4efe1c3717778b7076a0f116e792262e9c0572fdf168f"
+    },
+    {
+      "file": "demon-bg-corridor.png",
+      "bytes": 2522063,
+      "sha256": "16302e5142a07b04b38dfa27a5f289bde00e0a585ee03f59eed36cb5f94fda89"
+    },
+    {
+      "file": "demon-bg-dining.png",
+      "bytes": 1995541,
+      "sha256": "7c728e77793df5ec9369e0daa20dfc150811ed61e3e56b2f4830b71b28b4e020"
+    },
+    {
+      "file": "demon-bg-market.png",
+      "bytes": 2533859,
+      "sha256": "9217da4204996699639487921eeca2865d32acc9a7778118e49163f9324a374e"
+    },
+    {
+      "file": "demon-bg-prison.png",
+      "bytes": 2107380,
+      "sha256": "396ebd7b9c97cecdcf7fb4c38d1d8c5598c2053693ce3e1a8e2a943c31d3d99c"
+    },
+    {
+      "file": "demon-bg-study.png",
+      "bytes": 2177650,
+      "sha256": "782961aabab94dc6857b329c2921ab4dd9769edc98a33f76a966880d88b1564b"
+    },
+    {
+      "file": "demon-bg-terrace.png",
+      "bytes": 2500115,
+      "sha256": "c678e5f5d84aff9f5bbcabf73d0311ea6c7072e2fda76a2db224c73589c0cc4e"
     },
     {
       "file": "demon-cutscene-aftermath-v3.png",
@@ -73,11 +167,6 @@
       "sha256": "f1fa18441e8fd5aca58a3a45966a1653e6485bdd06ab9cf21d2be03132ca78db"
     },
     {
-      "file": "demon-expressions/index.html",
-      "bytes": 7751,
-      "sha256": "70c69adfc59260d65065457e0bf370f7ad35a8d397f033d1337bdf52753a8ddd"
-    },
-    {
       "file": "demon-expressions/portrait.js",
       "bytes": 11589,
       "sha256": "514c72bf306073d5eecb54d9f03c5f998704027f4713864144302904f4f83e2d"
@@ -89,23 +178,33 @@
     },
     {
       "file": "demon-route.css",
-      "bytes": 5832,
-      "sha256": "21b0bc4cc015d00979a5477b9741bec9c8c4acac4904506abb5f2c6f285ad3d1"
+      "bytes": 6610,
+      "sha256": "9e6a89c747bc491e4c153b2290308768f0744df4f821e55a8b74f54845050688"
     },
     {
       "file": "demon-route.js",
-      "bytes": 41464,
-      "sha256": "bcac8d9098c0ca285436ba3bcb81dcb81f72525b6f78f3be25c218170f495554"
+      "bytes": 46490,
+      "sha256": "2aaee6ba1a3990cebbd85f56938d32049f604a2fa8f833a06c6d6563bbfc95c0"
     },
     {
       "file": "demon-story.js",
-      "bytes": 145862,
-      "sha256": "870df1edd02ad8f9e6cf4168fb7e8f1a4c2a44f8663621d396d02482812029ac"
+      "bytes": 337724,
+      "sha256": "e8f9727a3fbc1ef35b2a376f6c6a223ef821b69ad805e5b11f90b70526acca8e"
+    },
+    {
+      "file": "display-settings.js",
+      "bytes": 1207,
+      "sha256": "a2cac181fe0ab90763c8d2ecbebb5cebc7bcd0c9c2484861a9bc1fe9801cacd7"
     },
     {
       "file": "effects.js",
       "bytes": 18419,
       "sha256": "7ba1fafcc59e00d76d959f1a5e34302f90ae52d20f33415dee9ea6a51639c52c"
+    },
+    {
+      "file": "game.html",
+      "bytes": 40100,
+      "sha256": "73f7030552c43fe8c3f2d6aa64232321acedb3622cb6ca514733f4a39787d48e"
     },
     {
       "file": "goddess-comic.png",
@@ -114,8 +213,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 39759,
-      "sha256": "d26a7629b22c07d307cd028c96ffa299b3690f24be452923c5cfa91329155c3e"
+      "bytes": 2601,
+      "sha256": "2793accdfddfc4d9293a6d140a8ae994166687e4ffa400be9437126cee0d564c"
     },
     {
       "file": "main-opening-blink.png",
@@ -166,6 +265,11 @@
       "file": "room-wall-comic.png",
       "bytes": 1362735,
       "sha256": "1407010fe4035b7d396a0faec2c18c2de3a2ce5075fad841b02d68d73685c208"
+    },
+    {
+      "file": "scene-layout.css",
+      "bytes": 4485,
+      "sha256": "295800df2742e909f932a5d38adad1d99a48aeb791f457cdd71292455a54beed"
     },
     {
       "file": "storybook-background-portrait.png",

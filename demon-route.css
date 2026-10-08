@@ -1,7 +1,7 @@
 /* The dialogue panel, text, buttons and controls inherit the main game's styles. */
 .demon-route[hidden]{display:none}
 .demon-route{position:fixed;inset:0;z-index:24;overflow-y:auto;isolation:isolate;background:#171319;color:#f5ead8}
-.demon-route::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 15%,#46323d44,transparent 70%),linear-gradient(180deg,#211923,#0d0b10)}
+.demon-route::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:#171319;background-position:center;background-repeat:no-repeat;background-size:cover;filter:saturate(.82) brightness(.68)}
 .demon-shell{min-height:100dvh;width:100%;display:flex;flex-direction:column;align-items:center}
 .demon-route .top{position:relative;width:100%;align-items:flex-start;flex:none}
 .demon-header-actions{display:flex;gap:16px;flex:none}.demon-header-actions .control{white-space:nowrap}
@@ -11,6 +11,8 @@
 .demon-cutscene[hidden]{display:none}
 .demon-cutscene{position:fixed;inset:74px 0 0;z-index:0;pointer-events:none;display:flex;justify-content:center;align-items:flex-start}
 .demon-cutscene img{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;animation:none;transform:none;filter:none}
+.demon-npc{bottom:calc(var(--dialogue-height,280px) + 10px);top:86px}
+.demon-npc[data-actor=S] img{width:55%;height:65%;align-self:flex-end;object-position:center bottom}
 .demon-route:is(.has-cutscene,.has-portrait) .top{background:linear-gradient(#100d13e8,#100d1399,transparent);text-shadow:0 2px 5px #000}
 /* Portrait framing stays intact. Wide displays give the artwork its own column. */
 @media(min-width:1000px) and (min-aspect-ratio:5/4){
@@ -28,11 +30,17 @@
 .demon-route.is-dead{background:#080709}.demon-route.is-dead::before{background:#080709}
 .demon-route.is-dead .eyebrow{color:#d9938d}
 .demon-route .click-hint[hidden]{display:none}
-.demon-route[data-location=prison]::before{background:repeating-linear-gradient(90deg,transparent 0 13%,#06080c30 13.3% 14%,transparent 14.3% 24%),radial-gradient(ellipse at 28% 0,#60718233,transparent 70%),#11131c}
-.demon-route[data-location=city]::before{background:radial-gradient(ellipse at 18% 35%,#c8885533,transparent 60%),radial-gradient(ellipse at 80% 5%,#758b9840,transparent 65%),#16131b}
-.demon-route[data-location=balcony]::before{background:radial-gradient(ellipse at 65% 0,#656d9438,transparent 65%),linear-gradient(180deg,#141a2b,#141019)}
-.demon-route[data-location=village]::before{background:radial-gradient(ellipse at 25% 0,#97806126,transparent 65%),#191b28}
-.demon-route.story-ending::before{background:radial-gradient(ellipse at 50% 0,#b9897035,transparent 70%),#171219}
+.demon-route[data-location=prison]::before{background-image:linear-gradient(#090b1090,#11101885),url('./demon-bg-prison.png')}
+.demon-route[data-location=dining]::before{background-image:linear-gradient(#120d1480,#130f1390),url('./demon-bg-dining.png')}
+.demon-route[data-location=castle]::before,.demon-route[data-location=corridor]::before{background-image:linear-gradient(#100d1470,#120f1688),url('./demon-bg-corridor.png')}
+.demon-route[data-location=study]::before{background-image:linear-gradient(#120c1280,#1710178c),url('./demon-bg-study.png')}
+.demon-route[data-location=city]::before{background-image:linear-gradient(#120e1670,#17111980),url('./demon-bg-market.png')}
+.demon-route[data-location=balcony]::before,.demon-route.story-ending::before{background-image:linear-gradient(#11132662,#17101a78),url('./demon-bg-terrace.png')}
+.demon-route[data-location=village]::before{background-image:linear-gradient(#15132670,#17131b80),url('./bellune-night.png')}
+.demon-route .text.council-summary{font-size:clamp(15px,1.25vw,18px);line-height:1.65}
+#journalCast p{line-height:1.8;padding:12px 0;border-bottom:1px solid #bba37b25}
+.demon-route:is(.has-cutscene,.has-portrait,.has-goddess)::before{filter:saturate(.78) brightness(.52)}
+@media(min-width:1000px) and (min-aspect-ratio:5/4){.demon-route::before{background-size:cover;background-position:center 42%}}
 .story-journal{width:min(600px,calc(100% - 28px));max-height:80vh;max-height:80dvh;padding:24px;color:#eee0cd;background:#211b24f5;border:1px solid #bba07970;box-shadow:0 22px 90px #0008;scrollbar-width:thin}
 .story-journal::backdrop{background:#09070bb8;backdrop-filter:blur(4px)}
 .story-journal header{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:19px;color:#e5c699}
