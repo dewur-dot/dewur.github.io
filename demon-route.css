@@ -30,13 +30,13 @@
 .demon-route.is-dead{background:#080709}.demon-route.is-dead::before{background:#080709}
 .demon-route.is-dead .eyebrow{color:#d9938d}
 .demon-route .click-hint[hidden]{display:none}
-.demon-route[data-location=prison]::before{background-image:linear-gradient(#090b1090,#11101885),url('./demon-bg-prison.png')}
-.demon-route[data-location=dining]::before{background-image:linear-gradient(#120d1480,#130f1390),url('./demon-bg-dining.png')}
-.demon-route[data-location=castle]::before,.demon-route[data-location=corridor]::before{background-image:linear-gradient(#100d1470,#120f1688),url('./demon-bg-corridor.png')}
-.demon-route[data-location=study]::before{background-image:linear-gradient(#120c1280,#1710178c),url('./demon-bg-study.png')}
-.demon-route[data-location=city]::before{background-image:linear-gradient(#120e1670,#17111980),url('./demon-bg-market.png')}
-.demon-route[data-location=balcony]::before,.demon-route.story-ending::before{background-image:linear-gradient(#11132662,#17101a78),url('./demon-bg-terrace.png')}
-.demon-route[data-location=village]::before{background-image:linear-gradient(#15132670,#17131b80),url('./bellune-night.png')}
+.demon-route[data-location=prison]::before{background-image:linear-gradient(#090b1090,#11101885),url('./demon-bg-prison-wide.png')}
+.demon-route[data-location=dining]::before{background-image:linear-gradient(#120d1480,#130f1390),url('./demon-bg-dining-wide.png')}
+.demon-route[data-location=castle]::before,.demon-route[data-location=corridor]::before{background-image:linear-gradient(#100d1470,#120f1688),url('./demon-bg-corridor-wide.png')}
+.demon-route[data-location=study]::before{background-image:linear-gradient(#120c1280,#1710178c),url('./demon-bg-study-wide.png')}
+.demon-route[data-location=city]::before{background-image:linear-gradient(#120e1670,#17111980),url('./demon-bg-market-wide.png')}
+.demon-route[data-location=balcony]::before,.demon-route.story-ending::before{background-image:linear-gradient(#11132662,#17101a78),url('./demon-bg-terrace-wide.png')}
+.demon-route[data-location=village]::before{background-image:linear-gradient(#15132670,#17131b80),url('./bellune-night-wide.png')}
 .demon-route .text.council-summary{font-size:clamp(15px,1.25vw,18px);line-height:1.65}
 #journalCast p{line-height:1.8;padding:12px 0;border-bottom:1px solid #bba37b25}
 .demon-route:is(.has-cutscene,.has-portrait,.has-goddess)::before{filter:saturate(.78) brightness(.52)}
@@ -52,9 +52,108 @@
 .name-entry{display:grid;gap:7px;font:11px Arial,'Malgun Gothic',sans-serif;color:#d3ba97;margin-bottom:4px}.name-entry input{width:100%;padding:10px 12px;color:#ffedd6;background:#ffffff08;border:1px solid #b79c704d;border-radius:2px;font:16px 'Malgun Gothic',sans-serif}.name-entry input:focus{outline:1px solid #d7b98c}
 .demon-route.remote-scene::after{content:'';position:fixed;inset:5% 3% 43%;border:1px solid #ead8bf18;box-shadow:inset 0 0 45px #c8ccf31a;pointer-events:none;z-index:1}
 @media(max-width:700px){.demon-header-actions{gap:11px}.demon-header-actions .control{font-size:11px}.demon-status{font-size:10px;gap:5px 10px}.story-journal{padding:18px}}
-.story-effect-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.flash.story-scene-flash{z-index:1;pointer-events:none}
+.story-effect-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
+.flash.story-scene-flash{z-index:6;pointer-events:none}
 .flash.story-scene-flash.active{animation-duration:.75s}
 .demon-preview-open{position:absolute;right:2%;bottom:calc(3% + 42px);z-index:2;padding:8px 13px;border:1px solid #fff8e8a8;border-radius:2px;background:#34271b88;color:#fff5dd;font:12px 'Malgun Gothic',sans-serif;letter-spacing:.04em;cursor:pointer;backdrop-filter:blur(5px)}
 .demon-preview-open:hover,.demon-preview-open:focus-visible{background:#765c42d9;outline:1px solid #f1d49a}
 @media(max-width:600px){.demon-status{gap:6px 12px;font-size:10px}.demon-preview-open{right:4%;bottom:calc(3% + 42px);font-size:11px;padding:7px 10px}}
+
+/* 하루 단위 전환: 검은 화면에서 DAY 달력이 한 장 넘어간다 */
+.day-card{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:#000;opacity:0;cursor:pointer}
+.day-card[hidden]{display:none}
+.day-card.on{animation:dayCardIn .55s ease-out both}
+.day-stage{position:relative;width:min(52vw,300px);aspect-ratio:1/1.12;perspective:1100px}
+.day-page{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr;overflow:hidden;border-radius:14px;background:#fbf7f1;color:#1d1220;box-shadow:0 24px 70px #ff7aa633,0 0 0 1px #ffffff22;backface-visibility:hidden}
+.day-page header{padding:.65em 0;background:#d83f70;color:#fff;font:700 clamp(14px,3.2vw,20px)/1 'Malgun Gothic',sans-serif;letter-spacing:.55em;text-indent:.55em;text-align:center}
+.day-page strong{display:grid;place-items:center;font:800 clamp(72px,17vw,132px)/1 Georgia,'Times New Roman',serif;letter-spacing:-.02em}
+.day-card.on .day-new{animation:dayRise .7s 1s cubic-bezier(.2,.8,.2,1) both}
+.day-card.on .day-old{transform-origin:50% 0;z-index:2;animation:dayFlip .95s .95s cubic-bezier(.55,.05,.85,.4) both}
+.day-card.on .day-stage{animation:dayStageOut .6s 3.1s ease-in both}
+@keyframes dayCardIn{from{opacity:0}to{opacity:1}}
+@keyframes dayFlip{0%{transform:rotateX(0)}100%{transform:rotateX(-112deg);opacity:0}}
+@keyframes dayRise{from{transform:scale(.94);filter:brightness(.7)}to{transform:scale(1);filter:none}}
+@keyframes dayStageOut{to{opacity:0}}
+
+/* 우측: 현재 일수 + 호감도 변화 토스트 */
+.demon-day{position:fixed;top:92px;right:16px;z-index:7;min-width:64px;padding:6px 12px 5px;border:1px solid #ffffff2e;border-radius:10px;background:#100d13b8;color:#fff3e4;text-align:center;pointer-events:none;backdrop-filter:blur(4px);text-shadow:0 1px 4px #000}
+.demon-day[hidden]{display:none}
+.demon-day small{display:block;font:700 10px/1 'Malgun Gothic',sans-serif;letter-spacing:.42em;text-indent:.42em;color:#f0a8bd}
+.demon-day strong{display:block;margin-top:3px;font:800 26px/1 Georgia,'Times New Roman',serif}
+.demon-day.bump strong{animation:dayBump .7s ease-out}
+@keyframes dayBump{0%{transform:scale(1.5);color:#ffd1df}100%{transform:scale(1)}}
+.gain-stack{position:fixed;top:168px;right:16px;z-index:7;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+.gain-toast{display:flex;align-items:center;gap:9px;padding:5px 15px 5px 5px;border:1px solid color-mix(in srgb,var(--c) 70%,transparent);border-radius:999px;background:#100d13e0;color:#fff3e4;font:600 14px/1 'Malgun Gothic',sans-serif;box-shadow:0 6px 22px #0008,0 0 18px color-mix(in srgb,var(--c) 28%,transparent);animation:gainFlow 2.7s cubic-bezier(.2,.8,.2,1) both}
+.gain-toast strong{margin-left:2px;font-size:17px;font-weight:800;color:#ffb3c8}
+.gain-toast.down strong{color:#a9bdff}
+.gain-face{display:grid;place-items:center;width:34px;height:34px;overflow:hidden;border:2px solid var(--c);border-radius:50%;background:color-mix(in srgb,var(--c) 38%,#1b1520);color:#fff;font-size:15px;font-weight:800}
+.gain-face img{display:block;width:100%;height:100%;object-fit:cover}
+@keyframes gainFlow{0%{opacity:0;transform:translateX(34px) scale(.94)}13%{opacity:1;transform:translateX(0) scale(1)}78%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateY(-10px)}}
+@media(max-width:700px){.demon-day{top:74px;right:10px;min-width:52px;padding:4px 9px}.demon-day strong{font-size:21px}.gain-stack{top:132px;right:10px}.gain-toast{font-size:12px}.gain-face{width:28px;height:28px}}
+
+/* 밤 자유시간 / 갤러리 */
+.choice small{display:block;margin-top:5px;font-size:12px;font-weight:400;color:#cdbfd6;letter-spacing:0}
+.choice.locked{opacity:.55;cursor:not-allowed;border-style:dashed}
+.demon-cg{position:fixed;inset:78px 26px 250px;z-index:1;display:grid;place-items:center;pointer-events:none}
+.demon-cg[hidden]{display:none}
+.cg-frame{position:relative;margin:0;display:grid;gap:8px;justify-items:center;width:min(100%,calc((100vh - 340px)*16/9));max-height:100%;animation:cgIn .9s ease-out both}
+.cg-art{width:100%;aspect-ratio:16/9;max-height:100%;overflow:hidden;border:1px solid color-mix(in srgb,var(--c,#e8c4d0) 70%,#fff);border-radius:6px;background:#110d16;box-shadow:0 20px 70px #000a,0 0 40px color-mix(in srgb,var(--c,#e8c4d0) 35%,transparent)}
+.cg-art img{display:block;width:100%;height:100%;object-fit:cover}
+.cg-placeholder{display:grid;place-content:center;gap:10px;width:100%;height:100%;text-align:center;background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--c,#e8c4d0) 45%,#1a1320),#0d0a11 75%)}
+.cg-placeholder strong{font:700 clamp(20px,3.4vw,34px)/1.2 'Malgun Gothic',serif;color:#fff3e6}
+.cg-placeholder span{font-size:12px;letter-spacing:.2em;color:#fff8;text-indent:.2em}
+.cg-tag{font:600 12px/1 'Malgun Gothic',sans-serif;color:#ffd6e2;letter-spacing:.04em}
+@keyframes cgIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.demon-route.has-cg .demon-day{display:none}
+.story-gallery{width:min(900px,calc(100% - 28px))}
+.gallery-count{margin:10px 0 0;font-size:13px;color:#cdbfd6}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:14px}
+.gallery-card{padding:10px;border:1px solid #bba07955;border-radius:8px;background:#17121bcc}
+.gallery-card.locked{opacity:.6;border-style:dashed}
+.gallery-art{display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;border-radius:5px;background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--c,#555) 45%,#1a1320),#0d0a11 80%);color:#fff9;font:700 15px/1.2 'Malgun Gothic',sans-serif;text-align:center}
+.gallery-art img{display:block;width:100%;height:100%;object-fit:cover}
+.gallery-card h4{margin:9px 0 3px;font-size:14px;color:#f1d9b5}
+.gallery-card p{margin:0;font-size:12px;line-height:1.55;color:#cfc2d6}
+@media(max-width:700px){.demon-cg{inset:70px 10px 270px}.cg-frame{width:100%}}
+
+.choices.hub{gap:5px}
+.choices.hub .choice{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:7px 14px;text-align:left}
+.choices.hub .choice small{margin:0;text-align:right;flex:none;max-width:60%}
+
+.demon-route[data-location=bedroom]::before{background-image:url('./rooms/room-bg-wide.png?v=20261016-room4');background-position:center;filter:none}
+
+/* 컷 비율 자동 대응(가로/세로 모두) */
+.cg-frame{width:min(100%,calc((100vh - 340px)*var(--ar,1.7778)))}
+.cg-art{aspect-ratio:var(--ar,16/9)}
+.gallery-art img{object-position:50% 28%}
+
+/* ── 전체화면 CG (블루 아카이브식): 일러스트가 화면을 가득 채우고 대사창만 위에 얹힌다 ── */
+.demon-cg{inset:0;z-index:2;display:block;place-items:unset}
+.cg-frame{position:absolute;inset:0;width:100%!important;max-height:none;display:block;margin:0;animation:cgFull .9s ease-out both}
+.cg-art{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto!important;max-height:none;border:0;border-radius:0;box-shadow:none;background:#0d0a11}
+.cg-art img{object-fit:cover;object-position:50% 30%}
+.cg-art::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#0005,transparent 20%,transparent 58%,#0008)}
+.cg-tag{position:absolute;top:58px;left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:#100d13c4;white-space:nowrap;animation:cgTag 5s ease forwards}
+@keyframes cgFull{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
+@keyframes cgTag{0%,78%{opacity:1}100%{opacity:0}}
+.demon-route.has-cg :is(.demon-npc,.demon-standing,#demonGoddess,.cast-slot,.demon-cutscene){display:none!important}
+.demon-route.has-cg .top,.demon-route.has-cg .panel{z-index:3}
+@media(max-width:700px){.demon-cg{inset:0}.cg-frame{width:100%!important}}
+/* 갤러리: 카드를 누르면 전체화면으로 크게 보기 */
+.cg-viewer{position:fixed;inset:0;z-index:100;background:#000;display:grid;place-items:center;cursor:zoom-out}
+.cg-viewer img{width:100%;height:100%;object-fit:contain}
+.cg-viewer p{position:absolute;left:0;right:0;bottom:12px;margin:0;text-align:center;color:#fff;text-shadow:0 1px 4px #000;font:600 14px 'Malgun Gothic',sans-serif}
+.gallery-card:not(.locked){cursor:zoom-in}
+
+/* ── v5 1막: 새 장소 배경(그림이 없으면 기존 배경으로 대체), 붉은 달 카운트다운 ── */
+.demon-route[data-location=throne]::before{background-image:linear-gradient(#120c1280,#1710178c),url('./demon-bg-throne-wide.png'),url('./demon-bg-study-wide.png')}
+.demon-route[data-location=yard]::before{background-image:linear-gradient(#100d1460,#120f1680),url('./demon-bg-yard-wide.png'),url('./demon-bg-corridor-wide.png')}
+.demon-route[data-location=storage]::before{background-image:linear-gradient(#100d1470,#120f1688),url('./demon-bg-storage-wide.png'),url('./demon-bg-corridor-wide.png')}
+.demon-day .dday{display:block;margin-top:3px;font:700 10px/1.2 'Malgun Gothic',sans-serif;letter-spacing:.02em;color:#ff9c9c;text-shadow:0 0 8px #ff3b3b66;white-space:nowrap}
+.demon-day .dday[hidden]{display:none}
+.day-page{grid-template-rows:auto 1fr auto}
+.day-card .dday{display:block;padding:0 0 .9em;text-align:center;font:700 clamp(12px,1.6vw,16px)/1.2 'Malgun Gothic',sans-serif;letter-spacing:.08em;color:#c42d55;font-style:normal}
+.day-card .dday[hidden]{display:none}
+.demon-route.has-cut .cg-placeholder span{color:#ffd9e4}
+
+.cg-tag:empty{display:none}

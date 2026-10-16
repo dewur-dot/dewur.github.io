@@ -1,0 +1,10 @@
+/* Seoul prologue, preserving the portrait illustration's full composition. */
+.game{background:#141820;height:100dvh;min-height:100dvh}
+.game .backdrop{background-size:contain;background-repeat:no-repeat;background-position:center;filter:none}
+.game #sceneGoddess{left:50%;right:auto;transform:translateX(-50%);bottom:10dvh;height:78dvh;max-width:95vw;pointer-events:none}
+.game #sceneGoddess[hidden]{display:none}
+.game #magic.light{left:calc(var(--tv-x,50%) - 6px);top:calc(var(--tv-y,30%) - 6px)}
+.game #magic.portal{left:calc(var(--tv-x,50%) - 14vmin);top:calc(var(--tv-y,30%) - 14vmin)}
+.game #scenePetals span{left:var(--tv-x,50%);top:var(--tv-y,30%)}
+.game #scenePetals span:nth-child(2){margin-left:3vmin}
+.game #scenePetals span:nth-child(3){margin-left:-3vmin}

@@ -1,0 +1,87 @@
+/* 가로(16:9) 일러스트 배치. 이전의 세로 그림용 배치를 덮어쓰도록 가장 마지막에 불러온다.
+   - 프롤로그: 그림이 화면을 꽉 채우고, 대사창은 마왕성 장면과 같은 아래쪽 띠
+   - 마왕성: 배경과 예전 컷신 3장도 화면을 꽉 채움
+   글자 크기는 화면 높이(vh) 기준이라 해상도 설정에 맞춰 함께 커지고 작아진다. */
+
+/* ── 프롤로그 ── */
+.game{background:#0d0f15}
+.game .backdrop,.game .backdrop.wide,.game .backdrop.bed-art,.game .backdrop.room-art{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;filter:none}
+.game #sceneGoddess{inset:0;left:0;right:0;top:0;bottom:0;transform:none;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;filter:none;z-index:1}
+.game .panel{position:absolute;left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;
+  padding:4.2vh 7vw 3.4vh;max-height:46vh;overflow-y:auto;scrollbar-width:none;
+  border:0;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  background:linear-gradient(transparent,rgba(12,14,22,.72) 24%,rgba(10,11,18,.9))}
+.game .panel::-webkit-scrollbar{display:none}
+.game .panel::before,.game .panel::after{display:none}
+.game .panel .eyebrow{font-size:clamp(10px,1.6vh,15px);margin-bottom:.6vh;padding-left:0;letter-spacing:.18em}
+.game .panel .name{font-size:clamp(13px,2.4vh,22px);margin:0 0 .9vh;padding-bottom:.7vh;border-bottom:1px solid #ffffff30}
+.game .panel .text{font-size:clamp(15px,3.1vh,30px);line-height:1.62;min-height:3.24em;margin:0 0 1.2vh;max-width:none}
+.game .panel .choices{max-width:min(900px,100%);width:auto;margin:.6vh 0 1vh;padding:0;transform:none;gap:.9vh}
+.game .panel .choice{font-size:clamp(13px,2.5vh,22px);padding:1.25vh 1.6vw;background:linear-gradient(100deg,#17232bd9,#26303ac9);color:#fff4e4;border:1px solid #e6d7c566;border-radius:4px}
+.game .panel .choice:hover,.game .panel .choice:focus-visible{background:#594b40ed;border-color:#efd2a6}
+.game .panel .controls{margin-top:.4vh}
+.game .panel .meta{margin-top:.6vh;font-size:clamp(10px,1.6vh,14px)}
+.game .panel .click-hint{right:7vw;bottom:2.4vh}
+/* 결과 화면, 이름 입력처럼 내용이 많은 장면은 더 높이 올라와도 된다 */
+.game .panel:has(.choices:not(:empty)){max-height:72vh}
+.game .panel.result{max-height:86vh;padding-top:3vh}
+
+/* ── 마왕성 ── */
+/* TV 빛: 가로 그림 속 TV 화면 가운데(가로 50.7%, 세로 27%) */
+.game{--tv-x:50.7%;--tv-y:27%}
+.demon-route::before{background-size:cover!important;background-position:center!important}
+.demon-cutscene,.demon-route:is(.has-cutscene,.has-portrait) .demon-cutscene{inset:0!important;align-items:stretch}
+.demon-cutscene img,.demon-route:is(.has-cutscene,.has-portrait) .demon-cutscene img{width:100%;height:100%;object-fit:cover!important;object-position:center 35%!important}
+
+/* ── 글자를 마우스로 끌어 잡지 못하게(클릭하다 파랗게 선택되는 것 방지). 입력칸은 예외 ── */
+html,body,.game,.demon-route,.menu-screen{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+.game .panel:focus,.demon-route .panel:focus{outline:none}
+
+/* ── 검수용 날짜 이동(오른쪽 위) ── */
+.day-jump{appearance:none;-webkit-appearance:none;cursor:pointer;flex:none;
+  font:12px/1.4 'Malgun Gothic',sans-serif;letter-spacing:.03em;color:#f0dfc6;
+  padding:4px 24px 4px 10px;border:1px solid #e6d7c55e;border-radius:3px;
+  background:#120f16a6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23e6d7c5'/%3E%3C/svg%3E") no-repeat right 8px center}
+.day-jump:hover,.day-jump:focus-visible{border-color:#efd2a6;outline:none;background-color:#2a2028d9}
+.day-jump option{color:#2e2925;background:#f1e6d4}
+.game .top .day-jump{position:relative;z-index:3}
+
+
+/* ── 공간이동(프롤로그 → 마왕성) ── */
+.warp{position:fixed;inset:0;z-index:80;pointer-events:none}
+html.warping-doc,html.warping-doc body{overflow:hidden!important}
+.warp canvas{position:absolute;inset:0;width:100%;height:100%}
+.warp-white{position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,#fff 0,#fff8fc 45%,#ffe9f5 100%);opacity:0}
+.warp.out .warp-white{transition:opacity 2s cubic-bezier(.4,0,.2,1);opacity:0!important}
+.game.warping{transition:transform 1.5s cubic-bezier(.55,0,.9,.4),filter 1.5s ease-in;transform:scale(1.35);filter:blur(3px) brightness(1.4) saturate(1.3)}
+
+/* ── 사망 화면: 검은 바탕에 피가 흘러내린다 ── */
+.death-screen{display:none;position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 45%,transparent 35%,#2a0006cc 100%)}
+.demon-route.is-dead .death-screen{display:block}
+.demon-route.is-dead::before{background:#050203!important;filter:none!important}
+.demon-route.is-dead :is(.demon-npc,.demon-standing,#demonGoddess,.cast-slot,.demon-cutscene){display:none!important}
+.demon-route.is-dead .panel{background:linear-gradient(transparent,#050203 30%)!important}
+.demon-route.is-dead #demonText{color:#e9d8d8}
+.death-blood{position:absolute;inset:0;width:100%;height:100%}
+.death-title{position:absolute;left:0;right:0;top:24%;text-align:center;opacity:0;
+  font:700 clamp(44px,13vh,130px)/1 'Noto Serif KR','Batang',serif;letter-spacing:.4em;padding-left:.4em;color:#c8121f;z-index:1;text-shadow:0 0 6px #000,0 0 14px #000,0 0 26px #ff1a2a44}
+.death-title small{display:block;margin-top:3vh;text-shadow:0 0 8px #000,0 0 16px #000!important;font:500 clamp(13px,2.4vh,22px)/1.5 'Noto Serif KR','Batang',serif;letter-spacing:.12em;padding:0;color:#c9a9ab;text-shadow:none}
+.death-screen.run .death-title{animation:deathTitle 2.4s ease .6s forwards}
+@keyframes deathTitle{0%{opacity:0;filter:blur(10px);transform:scale(1.1)}100%{opacity:1;filter:none;transform:none}}
+
+/* ── 스크롤 없애기: 게임 화면은 항상 고정 크기라 페이지가 스크롤될 일이 없다 ── */
+html,body{overflow:hidden!important}
+.demon-route{overflow:hidden!important}
+.demon-shell{height:100%;min-height:0!important;overflow:hidden}
+
+/* ── 시작 화면: 3:2 그림을 16:9 화면에 꽉 채움(양옆 빈 띠 없음, 위아래만 조금 잘림) ── */
+.menu-screen{overflow:hidden}
+.menu-art{position:absolute!important;left:50%;top:50%;width:max(100vw,150vh)!important;margin-left:calc(max(100vw,150vh) / -2);margin-top:calc(max(100vw,150vh) / -3)}
+.menu-screen .effects-open{position:fixed;right:2%;bottom:3%;z-index:4}
+/* 대사창 안의 스크롤바도 숨긴다(긴 대사는 대사창이 위로 더 늘어난다) */
+.demon-route .panel,.demon-route:is(.has-cutscene,.has-portrait) .panel{max-height:74dvh!important;scrollbar-width:none}
+.demon-route .panel::-webkit-scrollbar,.game .panel::-webkit-scrollbar,.demon-route ::-webkit-scrollbar{display:none;width:0;height:0}
+.game .panel{max-height:60vh}
+.demon-npc[data-actor=S]{top:54dvh!important;height:36dvh!important}

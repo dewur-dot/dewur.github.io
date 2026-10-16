@@ -17,7 +17,67 @@
 @keyframes castIn-left{from{opacity:0;translate:-9vw 0}to{opacity:1;translate:0 0}}
 @keyframes castIn-right{from{opacity:0;translate:9vw 0}to{opacity:1;translate:0 0}}
 /* 마왕(표정 캔버스)도 같은 슬롯 규칙을 따른다 */
-.demon-route.multi-cast #demonStanding.cast-slot{position:fixed;inset:auto;left:var(--x,50%);top:var(--top,5dvh);height:var(--h,100dvh);width:calc(var(--h,100dvh)*2/3);display:block;z-index:0}
+.demon-route.multi-cast #demonStanding.cast-slot{position:fixed;inset:auto!important;left:var(--x,50%)!important;right:auto!important;top:var(--top,5dvh)!important;bottom:auto!important;height:var(--h,100dvh);width:calc(var(--h,100dvh)*2/3);display:block;z-index:0}
 .demon-route.multi-cast #demonStanding.cast-slot.speaking{z-index:1}
 .demon-route.multi-cast #demonStanding.cast-slot :is(img,canvas){width:100%!important;height:100%!important}
 @media (prefers-reduced-motion:reduce){.cast-slot,.cast-slot.enter{animation:none!important;transition:filter .2s}}
+/* 마왕 스탠딩이 숨김 상태여도 다중 인물 규칙(display:block)에 덮이지 않도록 */
+.demon-route.multi-cast #demonStanding[hidden]{display:none!important}
+/* 방 화면(밤 허브): 배경 위 상호작용 영역. 마우스를 대면 반짝이며 이름이 뜬다 */
+.demon-route .room-hub{position:absolute;inset:0;z-index:20;pointer-events:none}
+.demon-route .room-hub[hidden]{display:none}
+.demon-route .room-stage{position:absolute;left:50%;top:50%;width:max(100vw,177.778vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%);pointer-events:none}
+.demon-route .room-object{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;transition:filter .2s ease}
+.demon-route .room-object.lit{filter:drop-shadow(0 0 4px #ffe2a8) drop-shadow(0 0 10px #ffcf7a88)}
+.demon-route .room-spot{position:absolute;pointer-events:auto;background:transparent;border:0;border-radius:14px;cursor:pointer;padding:0;transition:box-shadow .25s,background .25s}
+.demon-route .room-spot:focus-visible{outline:none}
+.demon-route .room-spot:hover::after,.demon-route .room-spot:focus-visible::after{opacity:1}
+.demon-route .room-spot.soon{cursor:default;opacity:.55}
+
+@keyframes roomGlow{50%{box-shadow:0 0 30px 8px rgba(255,220,160,.5)}}
+.demon-route .room-note{position:absolute;left:50%;top:44%;transform:translateX(-50%);color:#f7e6c4;background:rgba(20,14,18,.82);padding:8px 14px;border-radius:8px;pointer-events:none;margin:0;white-space:nowrap}
+
+/* 방 연출 (추정 좌표, 방 그림 기준 %) */
+.demon-route .room-fx{position:absolute;display:block;pointer-events:none;mix-blend-mode:screen;border-radius:50%}
+.demon-route .room-fx.glow-lamp{left:31%;top:6%;width:16%;height:22%;background:radial-gradient(closest-side,#ffc27a66,transparent);animation:lampPulse 3.4s ease-in-out infinite}
+.demon-route .room-fx.glow-window{left:55%;top:29%;width:10%;height:15%;background:radial-gradient(closest-side,#ffb85c55,transparent);animation:lampPulse 4.1s ease-in-out infinite reverse}
+.demon-route .room-fx.moon{left:50%;top:6%;width:14%;height:17%;background:radial-gradient(closest-side,#dfe9ff50,transparent 70%);animation:moonBreath 7s ease-in-out infinite}
+.demon-route .room-fx.flame-desk{left:calc(74.3% - .25%);top:33.4%}
+.demon-route .room-fx.sky{left:45%;top:8%;width:24%;height:36%;overflow:hidden;border-radius:0}
+.demon-route .room-fx.sky i{position:absolute;left:var(--x,50%);bottom:-6%;width:9px;height:12px;border-radius:50% 50% 40% 40%;background:radial-gradient(ellipse at 50% 70%,#fff3c8,#ff9a4a 60%,transparent 90%);box-shadow:0 0 12px 3px #ffb06a55;opacity:0;animation:skyRise 15s linear infinite}
+.demon-route .room-fx.sky i:nth-child(1){--x:18%;animation-delay:-1s}
+.demon-route .room-fx.sky i:nth-child(2){--x:46%;animation-delay:-6s;width:7px;height:9px}
+.demon-route .room-fx.sky i:nth-child(3){--x:72%;animation-delay:-10s;width:11px;height:14px}
+.demon-route .room-fx.sky i:nth-child(4){--x:30%;animation-delay:-13s;width:6px;height:8px}
+.demon-route .room-fx.sky i:nth-child(5){--x:88%;animation-delay:-3.5s;width:8px;height:10px}
+@keyframes flicker{0%{transform:scale(1,1) rotate(-2deg)}15%{transform:scale(.92,1.08) rotate(2deg)}30%{transform:scale(1.06,.94) rotate(-1deg)}48%{transform:scale(.97,1.1) rotate(3deg)}66%{transform:scale(1.04,.96)}82%{transform:scale(.9,1.12) rotate(-3deg)}100%{transform:scale(1,1)}}
+@keyframes lampPulse{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes moonBreath{0%,100%{opacity:.6}50%{opacity:.95}}
+@keyframes skyRise{0%{transform:translate(0,0) scale(.8);opacity:0}8%{opacity:.95}70%{opacity:.8}100%{transform:translate(0,-1900%) scale(.55);opacity:0}}
+/* 복도 선택: 가운데 목록 */
+.demon-route.room-pick #demonChoices{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;width:min(520px,88vw);max-height:72dvh;overflow:auto;margin:0;padding:18px;display:grid;gap:8px;background:#15101be8;border:1px solid #e6d7c55c;border-radius:6px;box-shadow:0 0 0 100vmax #0008}
+.demon-route .room-pick-empty{margin:0 0 6px;color:#f7e6c4;font:500 16px/1.5 'Malgun Gothic',sans-serif;text-align:center}
+
+/* 침대 빛: 방 그림의 침대 윤곽(클립)만 밝아진다 */
+.demon-route .room-bed-lit{position:absolute;inset:0;pointer-events:none;transition:filter .2s ease}
+.demon-route .room-bed-lit img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;clip-path:var(--bed-clip,polygon(23.9% 49.9%,31.1% 48.6%,31.1% 39.5%,32.6% 39.1%,33.9% 40.8%,43.0% 40.8%,44.1% 37.8%,44.8% 38.4%,44.9% 57.3%,43.2% 63.2%,40.8% 67.1%,38.3% 67.5%,35.1% 64.6%,29.0% 63.7%,27.3% 64.8%,25.7% 66.4%,24.1% 65.4%))}
+.demon-route .room-bed-lit.lit{filter:brightness(1.25) drop-shadow(0 0 4px #ffe2a8) drop-shadow(0 0 12px #ffcf7a88)}
+/* 라벨 말풍선(한 개) */
+.demon-route .room-tip{position:fixed;z-index:60;pointer-events:none;transform:translate(-50%,-100%);white-space:nowrap;color:#f7e6c4;background:rgba(20,14,18,.86);padding:4px 11px;border-radius:999px;font:13px 'Malgun Gothic',sans-serif}
+.demon-route .room-tip[hidden]{display:none}
+/* 방: 질문 글은 방 사물 위에 올라오고, 첫 클릭 뒤 사라진다 */
+.demon-route.room-mode .panel{visibility:hidden;pointer-events:none}
+.demon-route.room-mode .demon-title{display:none}
+/* 방 안: 대화창 대신 화면 가운데에 글만 뜬다. 첫 클릭 뒤에는 서서히 사라진다 */
+.demon-route .room-line{position:absolute;left:50%;bottom:12%;transform:translateX(-50%);width:min(80%,900px);margin:0;text-align:center;pointer-events:none;opacity:0;color:#fff4e4;font:500 clamp(18px,2.2vw,32px)/1.55 'Noto Serif KR','Batang',serif;letter-spacing:.02em;text-shadow:0 2px 12px #000,0 0 26px #000d,0 0 50px #0008}
+.demon-route .room-line.on{animation:roomLineShow 2.8s ease both}
+@keyframes roomLineShow{0%{opacity:0;transform:translate(-50%,8px)}14%{opacity:1;transform:translate(-50%,0)}76%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){.demon-route .room-line.on{animation-duration:2.8s;animation-name:roomLineFade}@keyframes roomLineFade{0%{opacity:0}14%,76%{opacity:1}100%{opacity:0}}}
+.demon-route .room-line:empty{display:none}
+.demon-route.room-mode .panel .choices{display:none}
+.demon-route.room-quiet .panel{visibility:hidden}
+.demon-route.room-quiet .room-tip{display:none}
+/* 촛불(책상): 불꽃 흔들림 + 은은한 주변 빛 */
+/* 위치: 세로 33.4%(사용자 표시)=불꽃 끝, 끝에서 3.6% 아래(≈37.0%)가 그림 속 촛불 심지. 가로는 그림 심지 중심(74.3%)에 맞춤 */
+.demon-route .room-fx.flame-desk{width:.5%;height:3.6%;border-radius:50% 50% 50% 50%/78% 78% 22% 22%;background:radial-gradient(ellipse at 50% 70%,#fff6d0 0%,#ffc35a 45%,#ff8a2a55 78%,transparent);transform-origin:50% 100%;animation:flicker 1.3s steps(7,end) infinite}
+.demon-route .room-fx.flame-desk::after{content:'';position:absolute;inset:-120%;border-radius:50%;background:radial-gradient(closest-side,#ffb55c33,transparent);animation:lampPulse 2.2s ease-in-out infinite}
